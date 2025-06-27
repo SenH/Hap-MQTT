@@ -1,0 +1,32 @@
+hap:
+  db_dir: data/db/
+  # ifaces:
+  #   - eno1
+  # address: 
+  # pin: 
+
+mqtt:
+  broker: 
+  username: 
+  password: 
+  # client_id: 
+
+devices:
+  tasmota_plugs:
+    - name: tasmota_A01234
+      friendly_name: Office Desk
+      options:
+        # - POWER2 # Define output for Tasmota device with multiple outputs. (optional)
+  enocean_dimmers:
+    - name: enocean_FUD61
+      friendly_name: Living Room
+  tasmota_climate_sensors:
+    - name: tasmota_A01234
+      friendly_name: Climate Cellar
+      options:
+        # - noco2 # Indicates sensor has no CarbonDioxide detection. (optional)
+  contact_sensors:
+    - name: kmpdino_123A45_r1
+      friendly_name: Front Door
+      options:
+        - KMPDINO/123A45/RELAY/1 # Set MQTT topic to listen on.
