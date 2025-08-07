@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"senhaerens.be/hap-mqtt/config"
 
@@ -40,7 +41,8 @@ type TasmotaClimateSensor struct {
 	*service.CarbonDioxideSensor
 	*characteristic.CarbonDioxideLevel
 	*characteristic.CarbonDioxidePeakLevel
-	config config.Device
+	CarbonDioxidePeakTime time.Time
+	config                config.Device
 }
 
 func NewTasmotaClimateSensor(id int, config config.Device) *TasmotaClimateSensor {
@@ -74,6 +76,7 @@ func NewTasmotaClimateSensor(id int, config config.Device) *TasmotaClimateSensor
 
 		a.CarbonDioxidePeakLevel = characteristic.NewCarbonDioxidePeakLevel()
 		a.CarbonDioxideSensor.AddC(a.CarbonDioxidePeakLevel.C)
+		a.CarbonDioxidePeakTime = time.Now()
 
 		a.AddS(a.CarbonDioxideSensor.S)
 	}
@@ -128,7 +131,11 @@ func (a *TasmotaClimateSensor) Listen(client mqtt.Client) {
 			a.CarbonDioxideDetected.SetValue(characteristic.CarbonDioxideDetectedCO2LevelsNormal)
 		}
 
-		if *sensor.CarbonDioxide > a.CarbonDioxidePeakLevel.Value() {
+		// Reset PeakLevel every 24 hours & only update if current value is higher
+		if time.Since(a.CarbonDioxidePeakTime) >= time.Hour*24 {
+			a.CarbonDioxidePeakTime = time.Now()
+			a.CarbonDioxidePeakLevel.SetValue(*sensor.CarbonDioxide)
+		} else if *sensor.CarbonDioxide > a.CarbonDioxidePeakLevel.Value() {
 			a.CarbonDioxidePeakLevel.SetValue(*sensor.CarbonDioxide)
 		}
 
