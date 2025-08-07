@@ -128,7 +128,7 @@ func (a *TasmotaClimateSensor) Listen(client mqtt.Client) {
 			a.CarbonDioxideDetected.SetValue(characteristic.CarbonDioxideDetectedCO2LevelsNormal)
 		}
 
-		if *sensor.CarbonDioxide > a.CarbonDioxideLevel.Value() {
+		if *sensor.CarbonDioxide > a.CarbonDioxidePeakLevel.Value() {
 			a.CarbonDioxidePeakLevel.SetValue(*sensor.CarbonDioxide)
 		}
 
