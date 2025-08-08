@@ -20,6 +20,9 @@ devices:
   enocean_dimmers:
     - name: enocean_FUD61
       friendly_name: Living Room
+  enocean_lightbulb:
+    - name: enocean_FUD14
+      friendly_name: Cellar
   tasmota_climate_sensors:
     - name: tasmota_A01234
       friendly_name: Climate Cellar

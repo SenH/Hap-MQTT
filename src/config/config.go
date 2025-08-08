@@ -24,6 +24,7 @@ type Config struct {
 	Devices struct {
 		TasmotaPlugs          []Device `yaml:"tasmota_plugs"`
 		EnOceanDimmers        []Device `yaml:"enocean_dimmers"`
+		EnOceanLightbulbs     []Device `yaml:"enocean_lightbulbs"`
 		TasmotaClimateSensors []Device `yaml:"tasmota_climate_sensors"`
 		ContactSensors        []Device `yaml:"contact_sensors"`
 	} `yaml:"devices"`

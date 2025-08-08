@@ -178,6 +178,15 @@ func main() {
 		accessories = append(accessories, device.A)
 	}
 
+	// Start at id 400
+	enoceanLightbulbs := make([]*devices.EnOceanLightbulb, len(cfg.Devices.EnOceanLightbulbs))
+	for i, deviceCfg := range cfg.Devices.EnOceanLightbulbs {
+		device := devices.NewEnOceanLightbulb(i+400, deviceCfg)
+		device.Listen(mqttClient)
+		enoceanLightbulbs[i] = device
+		accessories = append(accessories, device.A)
+	}
+
 	// Setup HAP filestore
 	err := os.MkdirAll(cfg.Hap.Dbdir, 0750)
 	if err != nil {
