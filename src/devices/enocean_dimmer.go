@@ -44,6 +44,10 @@ func NewEnOceanDimmer(id int, config config.Device) *EnOceanDimmer {
 	return &a
 }
 
+func (a *EnOceanDimmer) Accessory() *accessory.A {
+	return a.A
+}
+
 func (a *EnOceanDimmer) Listen(client mqtt.Client) {
 	// MQTT -> HAP
 	subLwt := "fhem"

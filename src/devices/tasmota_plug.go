@@ -43,6 +43,10 @@ func NewTasmotaPlug(id int, config config.Device) *TasmotaPlug {
 	return &a
 }
 
+func (a *TasmotaPlug) Accessory() *accessory.A {
+	return a.A
+}
+
 func (a *TasmotaPlug) Listen(client mqtt.Client) {
 	// for Tasmota devices which have multiple outputs
 	output := "POWER"

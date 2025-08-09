@@ -43,6 +43,10 @@ func NewContactSensor(id int, config config.Device) *ContactSensor {
 	return &a
 }
 
+func (a *ContactSensor) Accessory() *accessory.A {
+	return a.A
+}
+
 func (a *ContactSensor) Listen(client mqtt.Client) {
 	if len(a.config.Options) == 0 || a.config.Options[0] == "" {
 		log.Error("Field \"Output\" in device config is missing")

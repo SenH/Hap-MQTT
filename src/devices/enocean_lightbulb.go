@@ -43,6 +43,10 @@ func NewEnOceanLightbulb(id int, config config.Device) *EnOceanLightbulb {
 	return &a
 }
 
+func (a *EnOceanLightbulb) Accessory() *accessory.A {
+	return a.A
+}
+
 func (a *EnOceanLightbulb) Listen(client mqtt.Client) {
 	// MQTT -> HAP
 	subLwt := "fhem"
