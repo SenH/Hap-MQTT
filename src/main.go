@@ -202,6 +202,13 @@ func main() {
 		accessories: &accessories,
 	})
 
+	makeDevices[*devices.ShellyDimmer](devices.NewShellyDimmer, deviceOptions{
+		configs:     cfg.Devices.ShellyDimmers,
+		offset:      500,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
+
 	log.Debugf("%d HAP Accessories", len(accessories))
 
 	// Setup HAP filestore
