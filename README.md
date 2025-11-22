@@ -33,15 +33,20 @@ See `data/config.example.yml`.
 ## Contact Sensors
 * MQTT subscription topic must be provided by first option in `config.yml`.
 
-## EnOcean Dimmmers
+## EnOcean Dimmers
 * `$DEVICE` is the device name set in `config.yml`.
-
 #### MQTT subscription topics
 * Dim value (0-100): `fhem/stat/$DEVICE/dim`
 * State value (on-off): `fhem/stat/$DEVICE/state`
-
 #### MQTT publishing topics
 * Dim value (0-100): `fhem/cmnd/$DEVICE/dim`
+* State value (on-off): `fhem/cmnd/$DEVICE/state`
+
+## EnOcean Lightbulb
+* `$DEVICE` is the device name set in `config.yml`.
+#### MQTT subscription topic
+* State value (on-off): `fhem/stat/$DEVICE/state`
+#### MQTT publishing topic
 * State value (on-off): `fhem/cmnd/$DEVICE/state`
 
 ## Tasmota Climate Sensors
@@ -52,6 +57,5 @@ See `data/config.example.yml`.
 * `$OUTPUT` defaults to `POWER` but can be optionally set with first option in `config.yml`.
 #### MQTT subscription topic
 * Power value (ON-OFF): `stat/$DEVICE/$OUTPUT`
-
 #### MQTT publishing topic
 * Power value (ON-OFF): `cmnd/$DEVICE/$OUTPUT`
