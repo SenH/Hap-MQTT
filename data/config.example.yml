@@ -12,11 +12,11 @@ mqtt:
   # client_id: 
 
 devices:
-  tasmota_plugs:
-    - name: tasmota_A01234
-      friendly_name: Office Desk
+  contact_sensors:
+    - name: kmpdino_123A45_r1
+      friendly_name: Front Door
       options:
-        # - POWER2 # Define output for Tasmota device with multiple outputs. (optional)
+        - KMPDINO/123A45/RELAY/1 # Set MQTT topic to listen on.
   enocean_dimmers:
     - name: enocean_FUD61
       friendly_name: Living Room
@@ -28,8 +28,8 @@ devices:
       friendly_name: Climate Cellar
       options:
         # - noco2 # Indicates sensor has no CarbonDioxide detection. (optional)
-  contact_sensors:
-    - name: kmpdino_123A45_r1
-      friendly_name: Front Door
+  tasmota_plugs:
+    - name: tasmota_A01234
+      friendly_name: Office Desk
       options:
-        - KMPDINO/123A45/RELAY/1 # Set MQTT topic to listen on.
+        # - POWER2 # Define output for Tasmota device with multiple outputs. (optional)

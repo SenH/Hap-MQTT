@@ -22,10 +22,10 @@ type Config struct {
 	} `yaml:"mqtt"`
 
 	Devices struct {
-		TasmotaPlugs          []Device `yaml:"tasmota_plugs"`
+		ContactSensors        []Device `yaml:"contact_sensors"`
 		EnOceanDimmers        []Device `yaml:"enocean_dimmers"`
 		EnOceanLightbulbs     []Device `yaml:"enocean_lightbulbs"`
 		TasmotaClimateSensors []Device `yaml:"tasmota_climate_sensors"`
-		ContactSensors        []Device `yaml:"contact_sensors"`
+		TasmotaPlugs          []Device `yaml:"tasmota_plugs"`
 	} `yaml:"devices"`
 }
