@@ -86,6 +86,10 @@ func NewTasmotaClimateSensor(id int, config config.Device) *TasmotaClimateSensor
 	return &a
 }
 
+func (a *TasmotaClimateSensor) Accessory() *accessory.A {
+	return a.A
+}
+
 func (a *TasmotaClimateSensor) Listen(client mqtt.Client) {
 	// MQTT -> HAP
 	subLwt := fmt.Sprintf("tele/%s/LWT", a.config.Name)

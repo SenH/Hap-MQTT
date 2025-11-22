@@ -106,6 +106,31 @@ func setupSignals() context.Context {
 	return ctx
 }
 
+type devicer interface {
+	Listen(mqtt.Client)
+	Accessory() *accessory.A
+}
+
+type deviceOptions struct {
+	configs     []config.Device
+	offset      int
+	mqttClient  mqtt.Client
+	accessories *[]*accessory.A
+}
+
+func makeDevices[T devicer](newDevice func(int, config.Device) T, opts deviceOptions) []T {
+	devices := make([]T, len(opts.configs))
+
+	for i, config := range opts.configs {
+		device := newDevice(i+opts.offset, config)
+		device.Listen(opts.mqttClient)
+		devices[i] = device
+		*opts.accessories = append(*opts.accessories, device.Accessory())
+	}
+
+	return devices
+}
+
 func main() {
 	flag.Parse()
 
@@ -142,50 +167,42 @@ func main() {
 	// Setup HAP Accessories
 	var accessories []*accessory.A
 
-	// Start at id 2
-	tasmotaPlugs := make([]*devices.TasmotaPlug, len(cfg.Devices.TasmotaPlugs))
-	for i, deviceCfg := range cfg.Devices.TasmotaPlugs {
-		device := devices.NewTasmotaPlug(i+2, deviceCfg)
-		device.Listen(mqttClient)
-		tasmotaPlugs[i] = device
-		accessories = append(accessories, device.A)
-	}
+	makeDevices[*devices.TasmotaPlug](devices.NewTasmotaPlug, deviceOptions{
+		configs:     cfg.Devices.TasmotaPlugs,
+		offset:      2,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
 
-	// Start at id 100
-	enoceanDimmers := make([]*devices.EnOceanDimmer, len(cfg.Devices.EnOceanDimmers))
-	for i, deviceCfg := range cfg.Devices.EnOceanDimmers {
-		device := devices.NewEnOceanDimmer(i+100, deviceCfg)
-		device.Listen(mqttClient)
-		enoceanDimmers[i] = device
-		accessories = append(accessories, device.A)
-	}
+	makeDevices[*devices.EnOceanDimmer](devices.NewEnOceanDimmer, deviceOptions{
+		configs:     cfg.Devices.EnOceanDimmers,
+		offset:      100,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
 
-	// Start at id 200
-	tasmotaClimateSensors := make([]*devices.TasmotaClimateSensor, len(cfg.Devices.TasmotaClimateSensors))
-	for i, deviceCfg := range cfg.Devices.TasmotaClimateSensors {
-		device := devices.NewTasmotaClimateSensor(i+200, deviceCfg)
-		device.Listen(mqttClient)
-		tasmotaClimateSensors[i] = device
-		accessories = append(accessories, device.A)
-	}
+	makeDevices[*devices.TasmotaClimateSensor](devices.NewTasmotaClimateSensor, deviceOptions{
+		configs:     cfg.Devices.TasmotaClimateSensors,
+		offset:      200,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
 
-	// Start at id 300
-	lockMechanisms := make([]*devices.ContactSensor, len(cfg.Devices.ContactSensors))
-	for i, deviceCfg := range cfg.Devices.ContactSensors {
-		device := devices.NewContactSensor(i+300, deviceCfg)
-		device.Listen(mqttClient)
-		lockMechanisms[i] = device
-		accessories = append(accessories, device.A)
-	}
+	makeDevices[*devices.ContactSensor](devices.NewContactSensor, deviceOptions{
+		configs:     cfg.Devices.ContactSensors,
+		offset:      300,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
 
-	// Start at id 400
-	enoceanLightbulbs := make([]*devices.EnOceanLightbulb, len(cfg.Devices.EnOceanLightbulbs))
-	for i, deviceCfg := range cfg.Devices.EnOceanLightbulbs {
-		device := devices.NewEnOceanLightbulb(i+400, deviceCfg)
-		device.Listen(mqttClient)
-		enoceanLightbulbs[i] = device
-		accessories = append(accessories, device.A)
-	}
+	makeDevices[*devices.EnOceanLightbulb](devices.NewEnOceanLightbulb, deviceOptions{
+		configs:     cfg.Devices.EnOceanLightbulbs,
+		offset:      400,
+		mqttClient:  mqttClient,
+		accessories: &accessories,
+	})
+
+	log.Debugf("%d HAP Accessories", len(accessories))
 
 	// Setup HAP filestore
 	err := os.MkdirAll(cfg.Hap.Dbdir, 0750)
